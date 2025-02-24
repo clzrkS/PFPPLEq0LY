@@ -1,0 +1,180 @@
+# API Definition For Beetle
+# --------------------------
+#
+# In order to use this file:
+# 1. Check & Install https://github.com/Clivern/Poodle
+#
+# 2. Now you can use poodle to interact with your local or hosted beetle.
+#   $ poodle call -f .poodle.toml
+#
+
+[Main]
+    id = "clivern_beetle"
+    name = "Clivern - Beetle"
+    description = "Beetle API Definitions"
+    timeout = "30s"
+    service_url = "{$serviceURL:http://127.0.0.1:8080}"
+    # These headers will be applied to all endpoints http calls
+    headers = []
+
+[Security]
+    # Supported Types are basic, bearer and api_key and none
+    scheme = "none"
+
+    [Security.Basic]
+        username = "{$authUsername:default}"
+        password = "{$authPassword:default}"
+        header = ["Authorization", "Basic base64(username:password)"]
+
+    [Security.ApiKey]
+        header = ["X-API-KEY", "{$authApiKey:default}"]
+
+    # In case of bearer authentication, it is recommended to create another
+    # service or endpoint to generate the bearer tokens
+    [Security.Bearer]
+        header = ["Authorization", "Bearer {$authBearerToken:default}"]
+
+[[Endpoint]]
+    id = "GetSystemHealth"
+    name = "Get System Health"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/_health"
+    body = ""
+
+[[Endpoint]]
+    id = "GetSystemReadiness"
+    name = "Get System Readiness"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/_ready"
+    body = ""
+
+[[Endpoint]]
+    id = "GetMetrics"
+    name = "Get Metrics"
+    description = ""
+    method = "get"
+    headers = []
+    parameters = []
+    public = true
+    uri = "/metrics"
+    body = ""
+
+[[Endpoint]]
+    id = "GetClusters"
+    name = "Get Clusters"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/cluster"
+    body = ""
+
+[[Endpoint]]
+    id = "GetCluster"
+    name = "Get Cluster"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/cluster/{$clusterName}"
+    body = ""
+
+[[Endpoint]]
+    id = "GetClusterNamespaces"
+    name = "Get Cluster Namespaces"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/cluster/{$clusterName}/namespace"
+    body = ""
+
+[[Endpoint]]
+    id = "GetClusterNamespace"
+    name = "Get Cluster Namespace"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/cluster/{$clusterName}/namespace/{$namespaceName}"
+    body = ""
+
+[[Endpoint]]
+    id = "GetNamespaceApplications"
+    name = "Get Namespace Applications"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/cluster/{$clusterName}/namespace/{$namespaceName}/app"
+    body = ""
+
+[[Endpoint]]
+    id = "GetNamespaceApplicationByID"
+    name = "Get Namespace Application by ID"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/cluster/{$clusterName}/namespace/{$namespaceName}/app/{$applicationId}"
+    body = ""
+
+[[Endpoint]]
+    id = "GetJobs"
+    name = "Get Jobs"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    public = true
+    uri = "/api/v1/job"
+    body = ""
+
+[[Endpoint]]
+    id = "GetJobByUUID"
+    name = "Get Job by UUID"
+    description = ""
+    method = "get"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    uri = "/api/v1/job/{$jobUUID}"
+    body = ""
+
+[[Endpoint]]
+    id = "DeleteJobByUUID"
+    name = "Delete Job by UUID"
+    description = ""
+    method = "delete"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    uri = "/api/v1/job/{$jobUUID}"
+    body = ""
+
+[[Endpoint]]
+    id = "DeployApplicationById"
+    name = "Deploy Application By ID"
+    description = ""
+    method = "post"
+    headers = [ ["Content-Type", "application/json"] ]
+    parameters = []
+    uri = "/api/v1/cluster/{$clusterName}/namespace/{$namespaceName}/app/{$applicationId}/deployment"
+    body = """
+    {
+        "version":"{$version}",
+        "strategy":"{$strategy:recreate}"
+    }
+    """
